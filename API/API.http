@@ -1,0 +1,44 @@
+@API_HostAddress = https://localhost:5001
+
+### Get all members
+GET {{API_HostAddress}}/api/members
+Accept: application/json
+
+### Get a single member by id
+GET {{API_HostAddress}}/api/members/bob-id
+Accept: application/json
+
+### Get a member that doesn't exist (expect 404)
+GET {{API_HostAddress}}/api/members/does-not-exist
+Accept: application/json
+
+### Register a new user
+POST {{API_HostAddress}}/api/account/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "displayName": "Tom",
+  "email": "Turnchill@test.com",
+  "password": "letmein"
+}
+
+### Login
+POST {{API_HostAddress}}/api/account/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "bob@test.com",
+  "password": "Password"
+}
+
+### Login with the wrong password (expect 401)
+POST {{API_HostAddress}}/api/account/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "bob@test.com",
+  "password": "WrongPassword"
+}

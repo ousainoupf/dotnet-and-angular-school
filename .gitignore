@@ -1,0 +1,11 @@
+# Local SQLite database
+*.db
+*.db-shm
+*.db-wal
+
+# Visual Studio
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
