@@ -1,16 +1,6 @@
 @API_HostAddress = https://localhost:5001
 
-### Get all members
-GET {{API_HostAddress}}/api/members
-Accept: application/json
-
-### Get a single member by id
-GET {{API_HostAddress}}/api/members/bob-id
-Accept: application/json
-
-### Get a member that doesn't exist (expect 404)
-GET {{API_HostAddress}}/api/members/does-not-exist
-Accept: application/json
+### ---------- Account ----------
 
 ### Register a new user
 POST {{API_HostAddress}}/api/account/register
@@ -23,7 +13,8 @@ Accept: application/json
   "password": "letmein"
 }
 
-### Login
+### Login (run this first - its token is used by the requests marked [Authorize])
+# @name login
 POST {{API_HostAddress}}/api/account/login
 Content-Type: application/json
 Accept: application/json
@@ -42,3 +33,41 @@ Accept: application/json
   "email": "bob@test.com",
   "password": "WrongPassword"
 }
+
+### ---------- Members ----------
+
+### Get all members
+GET {{API_HostAddress}}/api/members
+Accept: application/json
+
+### Get a single member by id [Authorize] (Bob)
+GET {{API_HostAddress}}/api/members/c9f1befc-acc3-4a45-9ceb-b7ab3f7a4a3b
+Accept: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+### Get a single member without a token (expect 401)
+GET {{API_HostAddress}}/api/members/c9f1befc-acc3-4a45-9ceb-b7ab3f7a4a3b
+Accept: application/json
+
+### Get a member that doesn't exist [Authorize] (expect 404)
+GET {{API_HostAddress}}/api/members/does-not-exist
+Accept: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+### ---------- Buggy (error handling tests) ----------
+
+### Unauthorized (expect 401)
+GET {{API_HostAddress}}/api/buggy/auth
+Accept: application/json
+
+### Not found (expect 404)
+GET {{API_HostAddress}}/api/buggy/not-found
+Accept: application/json
+
+### Server error (expect 500)
+GET {{API_HostAddress}}/api/buggy/server-error
+Accept: application/json
+
+### Bad request (expect 400)
+GET {{API_HostAddress}}/api/buggy/bad-request
+Accept: application/json
